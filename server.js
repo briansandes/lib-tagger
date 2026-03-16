@@ -3,6 +3,7 @@ const AppDataSource = require('./src/config/datasource');
 
 const PORT = 3000;
 
+/* fails server initialization if it cannot connect to DB */
 AppDataSource.initialize()
   .then(() => {
     console.log('Database connected ✅');
