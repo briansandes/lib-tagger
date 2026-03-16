@@ -28,7 +28,7 @@ module.exports = new EntitySchema({
 
         path: {
             type: String,
-            nullable: false,
+            nullable: true,
         },
 
         extension: {
