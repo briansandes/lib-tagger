@@ -1,10 +1,13 @@
 const express = require('express');
-const routes = require('./routes');
+const requestId = require('./middlewares/requestId');
 const errorHandler = require('./middlewares/errorHandler');
+const routes = require('./routes');
 
 const app = express();
 
 app.use(express.json());
+
+app.use(requestId);
 
 app.use('/api', routes);
 
