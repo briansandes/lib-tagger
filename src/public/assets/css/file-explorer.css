@@ -1,0 +1,90 @@
+body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: system-ui;
+}
+
+#file-explorer {
+    height: 100vh;
+    overflow: hidden;
+    font-family: system-ui;
+
+    #sidebar {
+        width: 280px;
+        border-right: 1px solid #ddd;
+        overflow: auto;
+        padding: 10px;
+        background: #fafafa;
+    }
+
+    #main {
+        overflow: auto;
+        padding: 20px;
+        flex: 1;
+    }
+
+    .folder {
+        cursor: pointer;
+        padding: 4px 6px;
+        border-radius: 4px;
+    }
+
+    .folder:hover {
+        background: #ececec;
+    }
+
+    .children {
+        margin-left: 15px;
+        display: none;
+    }
+
+    .file-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 120px);
+        gap: 20px;
+    }
+
+    .file-card {
+        text-align: center;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .file-card:hover {
+        background: #f4f4f4;
+    }
+
+    .file-icon {
+        font-size: 36px;
+    }
+
+    .icon-image {
+        color: #0d6efd;
+    }
+
+    .icon-video {
+        color: #dc3545;
+    }
+
+    .icon-text {
+        color: #6c757d;
+    }
+
+    .filename {
+        font-size: 12px;
+        word-break: break-all;
+        height: 36px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .file-card:focus {
+        .filename {
+            overflow: visible;
+            -webkit-line-clamp: initial;
+        }
+    }
+}

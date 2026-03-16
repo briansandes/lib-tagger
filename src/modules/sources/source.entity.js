@@ -18,9 +18,9 @@ module.exports = new EntitySchema({
       type: String,
       nullable: false,
     },
-    config: {
+    path: {
       type: "text",
-      nullable: true,
+      nullable: false,
     },
     sync_at: {
       type: "datetime",

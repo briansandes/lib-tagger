@@ -46,11 +46,6 @@ module.exports = new EntitySchema({
             nullable: true,
         },
 
-        length: {
-            type: Number,
-            nullable: true,
-        },
-
         is_tagged: {
             type: Boolean,
             default: false,

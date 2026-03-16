@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lib Tagger</title>
+    <meta name="description" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Font -->
+    <!--  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"> -->
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/file-explorer.css" rel="stylesheet">
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="app-loading" style="display: none;">Loading...</div>
+    <div id="file-explorer">
+        <div class="d-flex h-100">
+
+            <div id="sidebar">
+                <div id="source-list"></div>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSourceModal">
+                    + Add new source
+                </button>
+            </div>
+
+            <div id="main">
+
+                <h5 id="folderTitle">Select a folder</h5>
+
+                <div id="fileGrid" class="file-grid"></div>
+            </div>
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addSourceModal" tabindex="-1" aria-labelledby="addSourceModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="addSourceModalLabel">Add new source</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="addSourceName" class="form-label">Source Name</label>
+                            <input type="text" class="form-control" id="addSourceName"
+                                placeholder="My files"
+                                value="My first source">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addSourcePath" class="form-label">Source Path</label>
+                            <input type="text" class="form-control" id="addSourcePath"
+                                placeholder="C:\my-files\assets, /home/projects"
+                                value="/home/brian/Desktop/crawl-images">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="addSource();">Add source and sync</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tagger"></div>
+    <script src="assets/js/jquery-4.0.0.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

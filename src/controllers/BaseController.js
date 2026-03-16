@@ -47,7 +47,7 @@ class BaseController {
 
             logger.reqInfo(req, `${this.resourceName} created`, { id: item.id });
 
-            response.success(res, item, `${this.resourceName} created`, 201);
+            response.success(res, item, `${this.resourceName} #${item.id} created`, 201);
 
         });
     }
