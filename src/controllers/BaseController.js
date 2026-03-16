@@ -63,7 +63,7 @@ class BaseController {
 
             logger.reqInfo(req, `${this.resourceName} updated`, { id: item.id });
 
-            response.success(res, item, `${this.resourceName} updated`);
+            response.success(res, item, `${this.resourceName} #${req.params.id} updated`);
 
         });
     }
@@ -79,7 +79,7 @@ class BaseController {
 
             logger.reqInfo(req, `${this.resourceName} deleted`, { id: req.params.id });
 
-            response.success(res, null, `${this.resourceName} deleted`);
+            response.success(res, null, `${this.resourceName} #${req.params.id} deleted`);
 
         });
     }
