@@ -1,29 +1,12 @@
+const BaseService = require('../../services/BaseService');
 const sourceRepository = require('./source.repository');
 
-exports.createSource = async (data) => {
-    return await sourceRepository.create({
-        name: data.name,
-        type: data.type,
-        config: JSON.stringify(data.config || {})
-    });
-};
+class SourceService extends BaseService {
 
-exports.getSources = async () => {
-    return await sourceRepository.findAll();
-};
+    constructor() {
+        super(sourceRepository);
+    }
 
-exports.getSourceById = async (id) => {
-    return await sourceRepository.findById(id);
-};
+}
 
-exports.updateSource = async (id, data) => {
-    return await sourceRepository.update(id, {
-        name: data.name,
-        type: data.type,
-        config: JSON.stringify(data.config || {})
-    });
-};
-
-exports.deleteSource = async (id) => {
-    return await sourceRepository.softDelete(id);
-};
+module.exports = new SourceService();

@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
 const controller = require('./source.controller');
 
-router.post('/', controller.createSource);
-router.get('/', controller.getSources);
-router.get('/:id', controller.getSourceById);
-router.put('/:id', controller.updateSource);
-router.delete('/:id', controller.deleteSource);
+router.get('/', controller.getAll());
+router.get('/:id', controller.getById());
+router.post('/', controller.create());
+router.put('/:id', controller.update());
+router.delete('/:id', controller.delete());
 
 module.exports = router;
