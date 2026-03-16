@@ -57,10 +57,21 @@ body {
 
     .file-icon {
         font-size: 36px;
+        height: 100px;
     }
 
     .icon-image {
         color: #0d6efd;
+        text-align: center;
+        align-items: flex-end;
+        display: flex;
+
+        img {
+            max-height: 100%;
+            display: inline-block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
     }
 
     .icon-video {

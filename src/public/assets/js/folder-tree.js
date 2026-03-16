@@ -50,9 +50,10 @@ ICONS
 ------------------------------------------
 */
 
-function icon(type) {
+function icon(type, asset_id = null) {
 
-    if (type === "image") return '<div class="file-icon icon-image">🖼</div>'
+    //if (type === "image") return '<div class="file-icon icon-image">🖼</div>'
+    if(type === "image") return '<div class="file-icon icon-image"><img src="api/media/'+asset_id+'" /></div>'
     if (type === "video") return '<div class="file-icon icon-video">🎬</div>'
 
     return '<div class="file-icon icon-text">📄</div>'
@@ -86,7 +87,7 @@ function displayFiles(folder) {
 
         card.innerHTML = `
 
-${icon(type)}
+${icon(type, asset.id)}
 
 <div class="filename" title="${asset.filename}">${asset.filename}</div>
 
