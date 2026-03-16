@@ -13,10 +13,16 @@ class BaseController {
     getAll() {
         return asyncHandler(async (req, res) => {
 
-            const items = await this.service.getAll();
+            const { page, limit, sort, ...filters } = req.query;
 
-            response.success(res, items);
+            const result = await this.service.getAll({
+                page: Number(page) || 1,
+                limit: Number(limit) || 20,
+                sort,
+                filters
+            });
 
+            return response.success(res, result.data, result.meta);
         });
     }
 

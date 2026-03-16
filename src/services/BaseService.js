@@ -1,19 +1,18 @@
 class BaseService {
-
     constructor(repository) {
         this.repository = repository;
     }
 
-    async create(data) {
-        return this.repository.create(data);
-    }
-
-    async getAll() {
-        return this.repository.findAll();
+    async getAll(query) {
+        return this.repository.findAll(query);
     }
 
     async getById(id) {
         return this.repository.findById(id);
+    }
+
+    async create(data) {
+        return this.repository.create(data);
     }
 
     async update(id, data) {
@@ -21,9 +20,8 @@ class BaseService {
     }
 
     async delete(id) {
-        return this.repository.softDelete(id);
+        return this.repository.delete(id);
     }
-
 }
 
 module.exports = BaseService;
