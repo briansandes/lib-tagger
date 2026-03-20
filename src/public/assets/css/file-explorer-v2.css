@@ -159,3 +159,20 @@ body {
         }
     }
 }
+
+.file-item.selected {
+  background: rgba(0, 120, 215, 0.3);
+  border: 1px solid #0078d7;
+}
+
+.selection-box {
+  position: absolute;
+  border: 1px dashed #0078d7;
+  background: rgba(0, 120, 215, 0.15);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+body {
+  /*user-select: none;*/
+}

@@ -10,6 +10,20 @@
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/file-explorer-v2.css" rel="stylesheet">
+
+    <style>
+        .file-item.selected {
+  background: rgba(0, 120, 215, 0.3);
+  border: 1px solid #0078d7;
+}
+
+.selection-box {
+  position: absolute;
+  border: 1px dashed #0078d7;
+  background: rgba(0, 120, 215, 0.15);
+  pointer-events: none;
+}
+    </style>
 </head>
 
 <body>
@@ -26,6 +40,7 @@
     </div>
 
     <script src="assets/js/source-tree.js"></script>
+    <script src="assets/js/select.js"></script>
     <script>
         sourceTree.init();
     </script>
