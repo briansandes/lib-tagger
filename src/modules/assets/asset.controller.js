@@ -6,7 +6,6 @@ class AssetController extends BaseController {
   constructor() {
     super(assetService, 'Asset');
   }
-
 }
 
 module.exports = new AssetController();

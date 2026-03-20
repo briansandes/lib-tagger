@@ -4,9 +4,11 @@ const router = express.Router();
 const mediaService = require('../services/MediaService');
 const sourceRoutes = require('../modules/sources/source.routes');
 const assetRoutes = require('../modules/assets/asset.routes');
+const tagRoutes = require('../modules/tags/tag.routes');
 
 router.use('/sources', sourceRoutes);
 router.use('/assets', assetRoutes);
+router.use('/tags', tagRoutes);
 
 router.use('/media/:id', async (req, res) => {
     res.sendFile(path.resolve(await mediaService.serve(req.params.id)));
