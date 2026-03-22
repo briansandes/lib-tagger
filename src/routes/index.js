@@ -1,7 +1,19 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
+const mediaService = require('../services/MediaService');
 const sourceRoutes = require('../modules/sources/source.routes');
+const assetRoutes = require('../modules/assets/asset.routes');
+const tagRoutes = require('../modules/tags/tag.routes');
+const assetTagRoutes = require('../modules/asset-tags/asset-tag.routes');
 
 router.use('/sources', sourceRoutes);
+router.use('/assets', assetRoutes);
+router.use('/tags', tagRoutes);
+router.use('/asset-tags', assetTagRoutes);
+
+router.use('/media/:id', async (req, res) => {
+    res.sendFile(path.resolve(await mediaService.serve(req.params.id)));
+});
 
 module.exports = router;

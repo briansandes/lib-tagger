@@ -1,29 +1,38 @@
+const BaseService = require('../../services/BaseService');
 const sourceRepository = require('./source.repository');
+const assetRepository = require('../assets/asset.repository');
+const { crawlDir } = require('../../utils/fileCrawler');
 
-exports.createSource = async (data) => {
-    return await sourceRepository.create({
-        name: data.name,
-        type: data.type,
-        config: JSON.stringify(data.config || {})
-    });
-};
+class SourceService extends BaseService {
 
-exports.getSources = async () => {
-    return await sourceRepository.findAll();
-};
+    constructor() {
+        super(sourceRepository);
+    }
 
-exports.getSourceById = async (id) => {
-    return await sourceRepository.findById(id);
-};
+    // custom parsing for config
+    async create(data) {
+        data.config = JSON.stringify(data.config);
 
-exports.updateSource = async (id, data) => {
-    return await sourceRepository.update(id, {
-        name: data.name,
-        type: data.type,
-        config: JSON.stringify(data.config || {})
-    });
-};
+        const newSource = await super.create(data);
 
-exports.deleteSource = async (id) => {
-    return await sourceRepository.softDelete(id);
-};
+        const assets = await crawlDir(newSource.path);
+
+        // Add source_id to each asset
+        const assetsWithSource = assets.map(a => ({ ...a, source_id: newSource.id }));
+
+        assetsWithSource.forEach(async element => {
+            assetRepository.create(element);
+        });
+
+        return newSource;
+    }
+
+    // custom parsing for config
+    async update(id, data) {
+        data.config = JSON.stringify(data.config);
+
+        return super.update(id, data);
+    }
+}
+
+module.exports = new SourceService();

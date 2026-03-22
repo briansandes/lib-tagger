@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dataset Explorer Mock</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            height: 100vh;
+            overflow: hidden;
+            font-family: system-ui;
+        }
+
+        #sidebar {
+            width: 280px;
+            border-right: 1px solid #ddd;
+            overflow: auto;
+            padding: 10px;
+            background: #fafafa;
+        }
+
+        #main {
+            overflow: auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .folder {
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .folder:hover {
+            background: #ececec;
+        }
+
+        .children {
+            margin-left: 15px;
+            display: none;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 120px);
+            gap: 20px;
+        }
+
+        .file-card {
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .file-card:hover {
+            background: #f4f4f4;
+        }
+
+        .file-icon {
+            font-size: 36px;
+        }
+
+        .icon-image {
+            color: #0d6efd;
+        }
+
+        .icon-video {
+            color: #dc3545;
+        }
+
+        .icon-text {
+            color: #6c757d;
+        }
+
+        .filename {
+            font-size: 12px;
+            word-break: break-all;
+            height: 36px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .file-card:focus {
+            .filename {
+                overflow: visible;
+                -webkit-line-clamp: initial;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="d-flex h-100">
+
+        <div id="sidebar"></div>
+
+        <div id="main">
+
+            <h5 id="folderTitle">Select a folder</h5>
+
+            <div id="fileGrid" class="file-grid"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        /*
+        ------------------------------------------
+        MOCK BACKEND FLATLIST GENERATOR
+        ------------------------------------------
+        */
+
+        const folders = [
+
+            "project-1/images/cats/",
+            "project-1/images/dogs/",
+            "project-1/images/birds/",
+            "project-1/images/nature/",
+            "project-1/videos/",
+            "project-1/docs/",
+            "project-1/screenshots/",
+            "project-2/images/cars/",
+            "project-2/images/bikes/",
+            "project-2/videos/",
+            "project-2/docs/",
+            "project-3/assets/textures/",
+            "project-3/assets/models/",
+            "project-3/docs/",
+            "archive/2022/images/",
+            "archive/2022/videos/",
+            "archive/2023/images/",
+            "archive/2023/docs/"
+
+        ]
+
+        const imageExt = ["jpg", "png", "gif", "webp"]
+        const videoExt = ["mp4", "mov", "avi", "webm"]
+        const textExt = ["txt", "md", "log", "json"]
+
+        const imageNames = [
+            "cat portrait",
+            "dog running",
+            "bird flying",
+            "ancient forest tree",
+            "wide river landscape",
+            "mountain sunset panorama",
+            "dramatic storm cloud formation",
+            "macro flower photography",
+            "beautiful lake reflection scene"
+        ]
+
+        const videoNames = [
+            "screen capture tutorial",
+            "gameplay recording session",
+            "product demo presentation",
+            "long conference recording",
+            "software feature walkthrough",
+            "experimental camera footage"
+        ]
+
+        const textNames = [
+            "project meeting notes",
+            "technical documentation draft",
+            "daily todo planning list",
+            "final quarterly report",
+            "system debug log archive",
+            "random development ideas"
+        ]
+
+        const adjectives = [
+            "very_long",
+            "extremely detailed",
+            "final version",
+            "edited copy",
+            "high resolution",
+            "backup",
+            "temporary",
+            "experimental build",
+            "archived",
+            "draft revision"
+        ]
+
+        const connectors = [
+            "_",
+            " ",
+            "_",
+            " "
+        ]
+
+        function rand(arr) {
+            return arr[Math.floor(Math.random() * arr.length)]
+        }
+
+        function randomSuffix() {
+
+            const parts = []
+
+            const extraWords = Math.floor(Math.random() * 4) + 2
+
+            for (let i = 0; i < extraWords; i++) {
+                parts.push(rand(adjectives))
+            }
+
+            return parts.join(rand(connectors))
+
+        }
+
+        function generateFlatList() {
+
+            const assets = []
+
+            for (let i = 1; i <= 200; i++) {
+
+                let type = rand(["image", "video", "text"])
+
+                let ext
+                let name
+
+                if (type === "image") {
+                    ext = rand(imageExt)
+                    name = rand(imageNames)
+                }
+
+                if (type === "video") {
+                    ext = rand(videoExt)
+                    name = rand(videoNames)
+                }
+
+                if (type === "text") {
+                    ext = rand(textExt)
+                    name = rand(textNames)
+                }
+
+                const connector = rand(connectors)
+
+                const filename =
+                    name +
+                    connector +
+                    randomSuffix() +
+                    connector +
+                    Math.floor(Math.random() * 100000)
+
+                assets.push({
+                    id: i,
+                    path: rand(folders),
+                    filename: filename + "." + ext
+                })
+
+            }
+
+            return assets
+
+        }
+
+        /*
+        ------------------------------------------
+        SIMULATED API PAYLOAD
+        ------------------------------------------
+        */
+
+        const assets = [
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.16.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1200x1600",
+    "checksum": "2a2b67db7aba7e1372685e7feeba07bc"
+  },
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.17 (1).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1199x1599",
+    "checksum": "4cedd28ff4c74ecef0f2b0e650362493"
+  },
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.17.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "899x1599",
+    "checksum": "592ecc5deb0a695083e6da61d87dc61d"
+  },
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.21.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1200x1600",
+    "checksum": "3dcae1abe4b579645ea33640611d6ccc"
+  },
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2025-10-08 at 14.41.42.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "800x600",
+    "checksum": "4bcfbd8ee8a6776d19a6adea4d339060"
+  },
+  {
+    "path": "",
+    "filename": "WhatsApp Image 2026-03-04 at 17.19.05.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1362x737",
+    "checksum": "4225093068045287e013ade9bd1c21b4"
+  },
+  {
+    "path": "asdfg/123123/",
+    "filename": "1920px-Mount_Rushmore_detail_view_(100MP).jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1920x1305",
+    "checksum": "11f4c08f2c3760cfe514b34934e7bfcb"
+  },
+  {
+    "path": "asdfg/123123/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.19 (1).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1317x927",
+    "checksum": "9a14d5bf4789ed8d4cba351c6676e9ba"
+  },
+  {
+    "path": "asdfg/123123/fgbdfh/",
+    "filename": "1772502745547.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "200x200",
+    "checksum": "7512fb0c24d597bad23872ede1bc4dc3"
+  },
+  {
+    "path": "asdfg/123123/fgbdfh/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.20.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "900x1600",
+    "checksum": "f5a371074f199627c7fad92f9379d1bd"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "1606472_690417741020430_1861929996_o.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1057x1057",
+    "checksum": "30a04771cb5952b094ea6ed6e4e5eb45"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "510452262_1149441463884981_5834493286652006046_n.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1080x1350",
+    "checksum": "3f9767d2164fa770b954932b3b396495"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "643423618_1254845272861629_3748361819677284425_n.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "718x957",
+    "checksum": "1f9788721947e2babefb558be729d961"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "WhatsApp Image 2024-11-04 at 15.59.23 (3).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1200x1600",
+    "checksum": "45fc2b0b2cdee51db7a54c4b2735f90c"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "WhatsApp Image 2024-11-04 at 15.59.24 (4).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1200x1600",
+    "checksum": "c3b4e44e2107af59837cc12246131660"
+  },
+  {
+    "path": "asdfg/123123 (copy)/",
+    "filename": "WhatsApp Image 2024-11-04 at 15.59.25.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1600x1200",
+    "checksum": "d0a70ea9f39991c6da27ab1a721cd2cf"
+  },
+  {
+    "path": "asdfg/",
+    "filename": "7a70a45e-c868-4b2a-bb54-c6a5d9ff62af.webm",
+    "extension": "webm",
+    "type": "video",
+    "length": null,
+    "dimensions": "1000x720",
+    "checksum": "234bfaa34b9d95374b3938c2a37983c3"
+  },
+  {
+    "path": "asdfg/",
+    "filename": "Rainy city night and guitar vibes (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "ab4fce1547b538d76891fedf1f0fdc22"
+  },
+  {
+    "path": "asdfg/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.19.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1199x1599",
+    "checksum": "da60325457f9b01c5183682c8776a1ab"
+  },
+  {
+    "path": "asdfg/",
+    "filename": "icon-instagram.webp",
+    "extension": "webp",
+    "type": "image",
+    "length": null,
+    "dimensions": "140x140",
+    "checksum": "ede814036b3bedcaea52fda8db259a6f"
+  },
+  {
+    "path": "asdfg/",
+    "filename": "profil-2-ezgif.com-resize.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "800x1200",
+    "checksum": "c304891b6c8a1fdcf104886311b41265"
+  },
+  {
+    "path": "bayern/",
+    "filename": "ChatGPT Image Mar 10, 2026, 12_09_04 PM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1024",
+    "checksum": "d541fe9d47fcffe2f3ed2f75a8678566"
+  },
+  {
+    "path": "bayern/",
+    "filename": "ChatGPT Image Mar 10, 2026, 12_12_36 PM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1024",
+    "checksum": "94ed6d77002425e4dd3b1e0a9b3a9f27"
+  },
+  {
+    "path": "bayern/",
+    "filename": "ChatGPT Image Mar 6, 2026, 11_33_09 PM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1024",
+    "checksum": "ae947c3d34f331d916729177b7d8cf4c"
+  },
+  {
+    "path": "bayern/",
+    "filename": "ChatGPT Image Mar 6, 2026, 11_38_38 PM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1024",
+    "checksum": "d541fe9d47fcffe2f3ed2f75a8678566"
+  },
+  {
+    "path": "bayern/aleatório/",
+    "filename": "ChatGPT Image Feb 23, 2026, 05_10_15 AM (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "1835e62f72453b964f9f68fe4d72e7a2"
+  },
+  {
+    "path": "bayern/aleatório/",
+    "filename": "ChatGPT Image Feb 23, 2026, 05_17_09 AM (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "eaa01d6eb1d8ba9c77bd1bf44916c60c"
+  },
+  {
+    "path": "bayern/aleatório/",
+    "filename": "ChatGPT Image Feb 23, 2026, 05_20_56 AM (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "e1daf083b2b11513c422961fd9eac90e"
+  },
+  {
+    "path": "bayern/aleatório/",
+    "filename": "ChatGPT Image Mar 2, 2026, 09_56_57 PM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1536",
+    "checksum": "cc88cfb6dfb67bba944718702828dd80"
+  },
+  {
+    "path": "bayern/aleatório/",
+    "filename": "ChatGPT Image Mar 9, 2026, 08_46_26 AM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "9032eb1d31b500ec6121f468d144ac27"
+  },
+  {
+    "path": "bayern/",
+    "filename": "cenario dia.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "36f9cf84b6b9605d4b59c0012bb58e46"
+  },
+  {
+    "path": "bayern/",
+    "filename": "checkout-stonks (1) (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "540x553",
+    "checksum": "edecdf0d898b9e8644adbf7866f369b9"
+  },
+  {
+    "path": "",
+    "filename": "bc553f03-c64a-4478-bfb5-ad06f031f573.webm",
+    "extension": "webm",
+    "type": "video",
+    "length": null,
+    "dimensions": "732x390",
+    "checksum": "deddfceb495522cf7cfd3933f02f6b5d"
+  },
+  {
+    "path": "downloads/",
+    "filename": "12143069_581797728637705_1563114992893734980_n.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "960x788",
+    "checksum": "1c1fb42aca3ca5250f8f2397727cf1e0"
+  },
+  {
+    "path": "downloads/",
+    "filename": "463007650_3911459555845201_8474878075749680753_n.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1152x2048",
+    "checksum": "2336a390e5b8b53070122f1341c7165c"
+  },
+  {
+    "path": "downloads/",
+    "filename": "463426541_8651854261502074_3460889349433931646_n.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "704x960",
+    "checksum": "72edfb722a4e6c012317806cc93cc06a"
+  },
+  {
+    "path": "downloads/",
+    "filename": "ChatGPT Image Feb 27, 2026, 08_05_02 AM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1536x1024",
+    "checksum": "88162ddf0013ef6d5983b396b07eaa34"
+  },
+  {
+    "path": "downloads/",
+    "filename": "ChatGPT Image Feb 27, 2026, 09_07_29 AM.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1536",
+    "checksum": "8891bca4b5baa82ca768d5ddb832c81b"
+  },
+  {
+    "path": "downloads/",
+    "filename": "brian-pedro.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "900x1600",
+    "checksum": "e032568600c1afe430cbede54f4dfe6d"
+  },
+  {
+    "path": "downloads/",
+    "filename": "comece-a-investir.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "512x800",
+    "checksum": "59eeeab9f3c908d11ac3be2846aa9670"
+  },
+  {
+    "path": "downloads/",
+    "filename": "controle total dos seus gastos (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "512x800",
+    "checksum": "87aa7f5b65dd9769bebf698cff71c7b7"
+  },
+  {
+    "path": "downloads/",
+    "filename": "i-want-you (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "595x800",
+    "checksum": "9c07a86494658d1285815cf0383491fb"
+  },
+  {
+    "path": "downloads/",
+    "filename": "landing-page-gorivaldo-ebooks (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "600x600",
+    "checksum": "66be498ec6068aca4c4f2df27b5e6594"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2024-04-28 at 18.21.37.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1600x720",
+    "checksum": "c87a4fb88e78d3c5a7cf0575057bcf55"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-04-14 at 14.30.53.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1199x1599",
+    "checksum": "ee61f43de8fbf615cbc86eda5a7b96f5"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-04-19 at 12.47.09.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1199x1599",
+    "checksum": "04842af8a0dd103bbb5edc9fab88fd58"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.26.27.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1600x1066",
+    "checksum": "4b0795088a39aa5e2b5320991d945017"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.23 (1).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "900x1600",
+    "checksum": "ed7295dc430fd27da3fa334915cdd5b9"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-08-09 at 11.40.23 (2).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "720x1600",
+    "checksum": "117b5bf66f02e3e22b6caa73e8ba9e44"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-09-08 at 00.56.16.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "720x1280",
+    "checksum": "7ed4dca4114df5e7dc7e033d84c76b8a"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-10-05 at 13.45.25.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "960x720",
+    "checksum": "32d3d91b4295147fc2d767f36b3514b3"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-10-08 at 14.33.49.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "633x477",
+    "checksum": "0068863234b2d15943b28f5c8a99f23e"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-10-08 at 14.41.42 (1).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1200x1600",
+    "checksum": "f92ff57ee68e7b5395f19ef3ca159555"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2025-10-08 at 14.41.43.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1600x1200",
+    "checksum": "6f3336d1002a1c122a4266116249a84c"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2026-02-04 at 16.47.55 (1).jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "967x1600",
+    "checksum": "b8f5330963ad14e2b315312c01489560"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2026-03-02 at 22.46.07.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1024",
+    "checksum": "529daa50f589025c594b5f462f95280d"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2026-03-02 at 22.46.08.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1024x1536",
+    "checksum": "c6f56f5763d65eaa89e040a2cae02047"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2026-03-04 at 17.19.47.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1421x793",
+    "checksum": "af5a24926992bacbbfbaf8c6893187dc"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "WhatsApp Image 2026-03-04 at 17.20.16.jpeg",
+    "extension": "jpeg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1421x790",
+    "checksum": "7b84283c9075ca4a87161ca3bda4073e"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "stock-4.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1280x853",
+    "checksum": "bfb27439700e30df93c7e0a8829645d7"
+  },
+  {
+    "path": "folder-teste/",
+    "filename": "stock-5.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "1280x960",
+    "checksum": "0bc9f8a3173e451dbcbe338f2582a514"
+  },
+  {
+    "path": "",
+    "filename": "hero-box-cover (1).png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "600x600",
+    "checksum": "868178a7142000fc361e5fd3755d0fe5"
+  },
+  {
+    "path": "",
+    "filename": "sala vazia.png",
+    "extension": "png",
+    "type": "image",
+    "length": null,
+    "dimensions": "1920x1080",
+    "checksum": "d3526df20aab27a17df442a29dbc7543"
+  },
+  {
+    "path": "",
+    "filename": "stock-1.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "612x408",
+    "checksum": "bfa51348cf66fcf9582e0c105c6816c0"
+  },
+  {
+    "path": "",
+    "filename": "stock-2.jpg",
+    "extension": "jpg",
+    "type": "image",
+    "length": null,
+    "dimensions": "640x447",
+    "checksum": "2aa19a2c38fd5e5b22c309473c999352"
+  }
+];
+
+        console.log("Mock backend payload:", assets)
+
+        /*
+        ------------------------------------------
+        BUILD FOLDER TREE
+        ------------------------------------------
+        */
+
+        function buildTree(assets) {
+
+            const tree = {}
+
+            assets.forEach(asset => {
+
+                const parts = asset.path.split("/").filter(Boolean)
+
+                let current = tree
+
+                parts.forEach(p => {
+
+                    if (!current[p]) current[p] = {}
+
+                    current = current[p]
+
+                })
+
+            })
+
+            return tree
+
+        }
+
+        const folderTree = buildTree(assets)
+
+        /*
+        ------------------------------------------
+        MAP FILES BY FOLDER
+        ------------------------------------------
+        */
+
+        const folderFiles = {}
+
+        assets.forEach(asset => {
+
+            const folder = asset.path.replace(/\/$/, "")
+
+            if (!folderFiles[folder]) folderFiles[folder] = []
+
+            folderFiles[folder].push(asset)
+
+        })
+
+        /*
+        ------------------------------------------
+        FILE TYPE DETECTION
+        ------------------------------------------
+        */
+
+        function getType(filename) {
+
+            const ext = filename.split(".").pop().toLowerCase()
+
+            if (imageExt.includes(ext)) return "image"
+            if (videoExt.includes(ext)) return "video"
+
+            return "text"
+
+        }
+
+        /*
+        ------------------------------------------
+        ICONS
+        ------------------------------------------
+        */
+
+        function icon(type) {
+
+            if (type === "image") return '<div class="file-icon icon-image">🖼</div>'
+            if (type === "video") return '<div class="file-icon icon-video">🎬</div>'
+
+            return '<div class="file-icon icon-text">📄</div>'
+
+        }
+
+        /*
+        ------------------------------------------
+        RENDER FILE GRID
+        ------------------------------------------
+        */
+
+        function displayFiles(folder) {
+
+            document.getElementById("folderTitle").innerText = folder
+
+            const grid = document.getElementById("fileGrid")
+
+            grid.innerHTML = ""
+
+            const list = folderFiles[folder] || []
+
+            let i = 0;
+            list.forEach(asset => {
+
+                const type = getType(asset.filename)
+
+                const card = document.createElement("div")
+                card.className = "file-card"
+                card.tabIndex = i;
+
+                card.innerHTML = `
+
+${icon(type)}
+
+<div class="filename" title="${asset.filename}">${asset.filename}</div>
+
+`
+
+                grid.appendChild(card)
+                i++;
+            })
+
+        }
+
+        /*
+        ------------------------------------------
+        RENDER SIDEBAR TREE
+        ------------------------------------------
+        */
+
+        function renderTree(obj, parent, path = "") {
+
+            Object.keys(obj).sort().forEach(key => {
+
+                const full = path ? path + "/" + key : key
+
+                const row = document.createElement("div")
+                row.className = "folder"
+
+                row.innerHTML = "📁 " + key
+
+                const children = document.createElement("div")
+                children.className = "children"
+
+                row.onclick = (e) => {
+
+                    e.stopPropagation()
+
+                    children.style.display =
+                        children.style.display === "block" ? "none" : "block"
+
+                    displayFiles(full)
+
+                }
+
+                parent.appendChild(row)
+                parent.appendChild(children)
+
+                renderTree(obj[key], children, full)
+
+            })
+
+        }
+
+        renderTree(folderTree, document.getElementById("sidebar"))
+
+    </script>
+
+</body>
+
+</html>

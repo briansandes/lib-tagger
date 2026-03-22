@@ -3,6 +3,7 @@ const { EntitySchema } = require("typeorm");
 module.exports = new EntitySchema({
   name: "Source",
   tableName: "sources",
+
   columns: {
     id: {
       type: Number,
@@ -17,9 +18,14 @@ module.exports = new EntitySchema({
       type: String,
       nullable: false,
     },
-    config: {
+    path: {
       type: "text",
+      nullable: false,
+    },
+    sync_at: {
+      type: "datetime",
       nullable: true,
+      default: null,
     },
     created_at: {
       type: "datetime",
@@ -33,6 +39,14 @@ module.exports = new EntitySchema({
       type: "datetime",
       nullable: true,
       default: null,
+    },
+  },
+
+  relations: {
+    assets: {
+      type: "one-to-many",
+      target: "Asset",
+      inverseSide: "source",
     },
   },
 });
